@@ -4,8 +4,279 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ABOUT - DARKNET ARCHIVE</title>
-    <link rel="stylesheet" href="css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Base styles */
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
+        
+        :root {
+            --terminal-green: #00ff00;
+            --dark-green: #008000;
+            --terminal-bg: #000000;
+            --terminal-border: #333333;
+            --warning-red: #ff0000;
+            --warning-yellow: #ffff00;
+            --status-blue: #0080ff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier Prime', monospace;
+            background: var(--terminal-bg);
+            color: var(--terminal-green);
+            overflow: hidden;
+            height: 100vh;
+        }
+        
+        .terminal-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            border: 2px solid var(--terminal-border);
+            position: relative;
+        }
+        
+        .terminal-header {
+            background: var(--dark-green);
+            color: var(--terminal-bg);
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .terminal-title {
+            letter-spacing: 2px;
+        }
+        
+        #current-time {
+            font-size: 12px;
+        }
+        
+        .boot-sequence {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            background: var(--terminal-bg);
+            padding: 20px;
+            border: 1px solid var(--terminal-green);
+            min-width: 400px;
+        }
+        
+        .boot-line {
+            margin: 10px 0;
+            opacity: 0;
+            animation: typewriter 0.5s forwards;
+        }
+        
+        .boot-line:nth-child(1) { animation-delay: 0s; }
+        .boot-line:nth-child(2) { animation-delay: 1s; }
+        .boot-line:nth-child(3) { animation-delay: 2s; }
+        .boot-line:nth-child(4) { animation-delay: 3s; }
+        
+        @keyframes typewriter {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards 4s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .status-bar {
+            background: var(--terminal-border);
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            border-top: 1px solid var(--terminal-green);
+        }
+        
+        #connection-status {
+            color: var(--status-blue);
+        }
+        
+        /* About page styles */
+        .about-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .section-header h1 {
+            font-size: 24px;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px var(--terminal-green);
+        }
+        
+        .info-section {
+            margin-bottom: 30px;
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            padding: 20px;
+            background: rgba(0, 255, 0, 0.02);
+        }
+        
+        .info-section h2 {
+            color: var(--terminal-green);
+            margin-bottom: 15px;
+            font-size: 16px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 5px var(--terminal-green);
+        }
+        
+        .info-section p {
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        
+        .stats-section {
+            margin-top: 40px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            border: 1px solid var(--terminal-green);
+            padding: 20px;
+            background: rgba(0, 255, 0, 0.05);
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--terminal-green);
+            text-shadow: 0 0 10px var(--terminal-green);
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            margin-top: 5px;
+            opacity: 0.7;
+        }
+        
+        .navigation-help {
+            text-align: center;
+            margin-top: 30px;
+            opacity: 0.6;
+            font-size: 12px;
+        }
+        
+        /* Contact info styles */
+        .contact-methods {
+            margin-top: 15px;
+        }
+        
+        .contact-item {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .contact-icon {
+            width: 30px;
+            color: var(--status-blue);
+        }
+        
+        /* PGP key styles */
+        .pgp-container {
+            margin-top: 15px;
+        }
+        
+        .pgp-toggle {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid var(--terminal-green);
+            padding: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .pgp-toggle:hover {
+            background: rgba(0, 255, 0, 0.15);
+        }
+        
+        .pgp-content {
+            display: none;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--terminal-green);
+            border-top: none;
+            padding: 15px;
+            font-size: 12px;
+            line-height: 1.4;
+            overflow-x: auto;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .pgp-content.expanded {
+            display: block;
+        }
+        
+        /* Session info */
+        .session-info {
+            margin-top: 20px;
+            padding: 10px;
+            background: rgba(0, 255, 0, 0.05);
+            border: 1px solid var(--terminal-green);
+            font-size: 12px;
+            word-break: break-all;
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--terminal-bg);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--terminal-green);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--dark-green);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="terminal-container">
@@ -16,8 +287,8 @@
         
         <div class="boot-sequence" id="boot-sequence">
             <div class="boot-line">INITIALIZING SECURE CONNECTION...</div>
-            <div class="boot-line">LOADING ENCRYPTED DATABASES...</div>
-            <div class="boot-line">VERIFYING INTEGRITY...</div>
+            <div class="boot-line">LOADING SECURE PROFILE...</div>
+            <div class="boot-line">VERIFYING IDENTITY...</div>
             <div class="boot-line">ACCESS GRANTED</div>
         </div>
 
@@ -59,22 +330,98 @@
                     <div class="info-section">
                         <h2>CONTACT</h2>
                         <p>
-                            For submissions or security concerns:<br>
-                            • PGP: 1A2B 3C4D 5E6F 7G8H<br>
-                            • Tor: darkarch2x3y4z5.onion<br>
-                            • Signal: +1-555-SECURE
+                            For submissions or security concerns:
                         </p>
+                        <div class="contact-methods">
+                            <div class="contact-item">
+                                <span class="contact-icon"><i class="fas fa-key"></i></span>
+                                <span>PGP: 1A2B 3C4D 5E6F 7G8H</span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon"><i class="fas fa-network-wired"></i></span>
+                                <span>Tor: darkarch2x3y4z5.onion</span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon"><i class="fas fa-comment"></i></span>
+                                <span>Signal: +1-555-SECURE</span>
+                            </div>
+                        </div>
+                        
+                        <div class="pgp-container">
+                            <div class="pgp-toggle" id="pgp-toggle">
+                                <span>Show PGP Public Key</span>
+                                <span><i class="fas fa-chevron-down"></i></span>
+                            </div>
+                            <div class="pgp-content" id="pgp-content">
+                                -----BEGIN PGP PUBLIC KEY BLOCK-----<br>
+                                <br>
+                                mQINBGimHKEBEAC2yxNoww6XwDK6EygoWFAikExUtlRoT7LG9/eFdvw3G99EE849<br>
+                                6hD07FKHjhsACPFRB6K/7o3duAy/Xporef/amkgBpCV1WsOiLE/M4tE/bx0H4CAz<br>
+                                JaIfV+DgZL5h09ByXKBDvAy1HkewnPDKrypVneGre43Hu89cWvvokLBg9ad9itai<br>
+                                EYHoFtKpZk2feBPKIBa2qFLrr96l0SMZgW/EBSHFLW6aD9iu9KlUT70ntLcTCp8N<br>
+                                Z+9Ln3P2SCov6sWiqreUFs+jsUdWOK7YMPMrSgFUW8NQwpXEGR7KO8jp08cb48XK<br>
+                                8/q/OBsjcWt0YXBfHCleYO4UHI9ahBTBxaEMJrhnV7Rjt7+RcGmydb05IEieC5Ou<br>
+                                2nOoRPRrpSDNf7OrpQ7tMi3RROLLXtqijbvsYh7TtesFso7m5vKU0NNIko7SSGGP<br>
+                                72y7R+tvv1DGRChkq7RgkNcMZHY+vzIbNyt3yye208EcZlbQ2m+sfHSV1tomsnt5<br>
+                                ciddDdemDh6d5TUDgJ59nNroufnfq+oel4b58E+9HRb+yXf0+vWePcYqm/NkMP6o<br>
+                                tYz2QGy5t7L7UhONVgBezZpymEV7oSeiFfhQ8VJSc+auTXosk/wuCfTnM5Nhnon8<br>
+                                YHfb1TFOeb95lIHGdQQ/vdMzOL9KfkzJ8vVI+vdUNp/T3/V+9gMj3kvSOQARAQAB<br>
+                                tC9EcnVzaWVlIChPd25lciBvZiBDcm93KSA8ZHJ5YnVubnlAbWFpbDJ0b3IuY29t<br>
+                                PokCTgQTAQoAOBYhBA2ldRmB/QcLFwAL6zfzlYK3P+2YBQJophyhAhsDBQsJCAcC<br>
+                                BhUKCQgLAgQWAgMBAh4BAheAAAoJEDfzlYK3P+2Y0ngQAKJtVQAieSu/akGqglG0<br>
+                                mig5TR3OaFIZ7FaCs7Pnjq8POavQddztHMVlreVfNg5aiEMNTUFyasj+0pZ7K6rw<br>
+                                Ob01+mLrGCbNuaUACe0wUvZgZUY45oGiDjS+hTmxmR4GvYw9i1iLDzoIaaycf/Vg<br>
+                                91pb40mookJKggQGi9dSaSsBF7G95WQd2lTUsa0SQ3JioeGiDjkI2Dlg9sOUnyUf<br>
+                                rP/mNFZPhrL7xeJggePjyB0Je8B4PtPS4iiCrqq9GaHmoZC2/MPW2DDf53QAjxIP<br>
+                                k9UxvXUFpx1hxDJAId/tqrtpF+GK/a54Ccc/Q029QacNquIIQLMdyrufF11LPuan<br>
+                                3TT1LkCOLxJ8IQOvGXPW5cyAP07NEVQVHuWDBSXH4wKz166W69ix52ikX4FhHSWm<br>
+                                +EPyM1VGZjstW5j3n3k+7welFFBkLRSeowgO6yvGJnCTU30AZnFF/skXUtYVE/pU<br>
+                                9hNxtKHaAo2Oy+D4wiaB+Mi6IClTbYh/aVCwFQIRZVk2BIEXurAZnpfej3wX8Dob<br>
+                                e80RQ/aNHnLykZjNZgOoHO0h0rS4WROWTzh7Jt63mK0I7fkll3khIb2e11lY/h/J<br>
+                                15DN/qoJOSqa5pvepwbvBeAOibD9Cotof4Sjm3nGjHRx5X5iUjXdPY7e0rWi84T7<br>
+                                3yTvRg5tvbY1hd47L0/HLWr4uQINBGimHKEBEAC63fn34Xt8s8Al8DCiZldd5tLn<br>
+                                EZXBUvBr8SsbwMjgKQ2K1Q/L9pliPCV/3lGw24Lu1GD6sVUbvvQXBQ/fZ85lUm58<br>
+                                4/FuLXYPB3odVrnLcUerTThENNYASXLy9PO652C1TZvKznBPsnqmF+x2GXtmB1QC<br>
+                                N4oMqb8M4uM/xtchZYIrr0SjwREz4BTW+KKunkB+h8z+O+ff15CZN8M46FAPwvwm<br>
+                                qPrbbDGtK5YsiewP46RnZlohhWa2+OrHNo7iAi+iFfh9WhEG3ey4Y2bGy2yLc7/t<br>
+                                iaenSYy2VkU/iD5HENhFiF+b17NU0sHAoUpWwsGoiiJb3YSJhzzr4hVwSzQMydz9<br>
+                                CU08X2LcsaCBU7b3DsNPnbMliV7g33BwODlFYuKJKmQmS+O4Cg2yE61kmydOwJKp<br>
+                                vyI8lnNeFjKMuNRtCxqIpUbs6c2VqBYbLoF4CkFQPhRycanqRuy95+ck1pvAsOh+<br>
+                                0Qehk6UCja5wgZsoJHX1jYNsrIJv1lDTCNO2OqrKM8XYqohuYyr+RRUAH6PMt5RT<br>
+                                Rqe87ftp5i/hNFqQCLXosGGM2dlDImOdGKXYTHcjjchQLMLFN68UU8J3rb1SMhUg<br>
+                                yAUvmVBO95t6tO08EzMxS/pvUUy5F2OgkmiU+JqcIacSPOA8H4zYRue9LZdwpBoa<br>
+                                ue3YqbIVDcySIAuR0wARAQABiQI2BBgBCgAgFiEEDaV1GYH9BwsXAAvrN/OVgrc/<br>
+                                7ZgFAmimHKECGwwACgkQN/OVgrc/7ZhTTA/+JpRSJQbiGQzwbkWNbkSvRdCr5PTm<br>
+                                YwuFEOJlfT7ttnaD1T1fO15/wrwNREFmUedSBXXGaF+M4dkTTIeNJIAavWL2QMNF<br>
+                                HRw+pOyjUGDJDA/rLG3TKusBhs6ACVxoqBQB8s5ERR5gU1y1YmOu2qr5Q3XVY0Wl<br>
+                                toB+DA0lteuFt/c/MBIbReDr/GlMxxbnaRpgeEIjShd38+KhC+h7Nfj1/pSAef9B<br>
+                                chF5+9jXXpat8ITJBQypNAQV4Y1wUS7G6INbo8XRByo+db2cqZel44PjC+exJ3Ng<br>
+                                0z/3VYg4FCB5YMn4uevqqykCGZqRfhy1sRkqN7xstckOnv0qeawXjF+uJQMrP16L<br>
+                                I5TuJUC17FTyitdXS6fAlV8q/rfta04KvGg2buW8+8OvKZhmTunL03uEbhFiVKT0<br>
+                                64XkbCCsJXkw+SWNl/a2qWC1YCkpxu/RBq4yymiT89no+ftSCmHkwWNxw0xNoJoi<br>
+                                Jk2NfpLpZ30SbtTYCbOcVt3WCNW/adhSNd4YO+jGWt0GFbBINkM9bewXtS+/+YHt<br>
+                                AE7YNFJPec/BinWHqtjUCh9oKCdfGwK7rePnUIQu0O4N8vMCJbX7SOiIDJZKttBj<br>
+                                CVsGHvaQB2F29Cm4LsvkrduomW9LDQ/tXaQj7k8BTopH035Y40U6AMPXlzU8fVcL<br>
+                                jVG6sKh2s/L9J3Y=<br>
+                                =Vc75<br>
+                                -----END PGP PUBLIC KEY BLOCK-----
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="session-info">
+                        <strong>Current Session:</strong> 0582928ff50b57a08ef2702fac7b7af782c5b7f02a958fc91ed67cd175153a7613
                     </div>
 
                     <div class="stats-section">
                         <h2>ARCHIVE STATISTICS</h2>
                         <div class="stats-grid">
                             <div class="stat-item">
-                                <div class="stat-number">4</div>
+                                <div class="stat-number">12</div>
                                 <div class="stat-label">Databases</div>
                             </div>
                             <div class="stat-item">
-                                <div class="stat-number">2</div>
+                                <div class="stat-number">9</div>
                                 <div class="stat-label">Classified Files</div>
                             </div>
                             <div class="stat-item">
@@ -101,16 +448,60 @@
         </div>
     </div>
 
-    <audio id="keypress-sound" preload="auto">
-        <source src="audio/keypress.wav" type="audio/wav">
-    </audio>
-    <audio id="select-sound" preload="auto">
-        <source src="audio/select.wav" type="audio/wav">
-    </audio>
-    <audio id="error-sound" preload="auto">
-        <source src="audio/error.wav" type="audio/wav">
-    </audio>
-
-    <script src="js/main.js"></script>
+    <script>
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // PGP key toggle
+            const pgpToggle = document.getElementById('pgp-toggle');
+            const pgpContent = document.getElementById('pgp-content');
+            
+            pgpToggle.addEventListener('click', function() {
+                if (pgpContent.classList.contains('expanded')) {
+                    pgpContent.classList.remove('expanded');
+                    this.querySelector('i').className = 'fas fa-chevron-down';
+                } else {
+                    pgpContent.classList.add('expanded');
+                    this.querySelector('i').className = 'fas fa-chevron-up';
+                }
+            });
+            
+            // Hide boot sequence
+            setTimeout(() => {
+                const bootSequence = document.getElementById('boot-sequence');
+                const mainContent = document.getElementById('main-content');
+                if (bootSequence) {
+                    bootSequence.style.display = 'none';
+                }
+                if (mainContent) {
+                    mainContent.style.opacity = '1';
+                }
+            }, 4500);
+            
+            // Update time
+            updateTime();
+            setInterval(updateTime, 1000);
+            
+            // Bind escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    window.location.href = 'index.html';
+                }
+            });
+        });
+        
+        // Update time
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('en-US', { 
+                hour12: false, 
+                timeZone: 'UTC' 
+            }) + ' UTC';
+            
+            const timeElement = document.getElementById('current-time');
+            if (timeElement) {
+                timeElement.textContent = timeStr;
+            }
+        }
+    </script>
 </body>
 </html>
