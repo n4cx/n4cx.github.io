@@ -6,6 +6,126 @@
     <title>DATABASE ARCHIVES - DARKNET ARCHIVE</title>
     <link rel="stylesheet" href="css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* List view styles */
+        .database-list {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        
+        .database-list th {
+            text-align: left;
+            padding: 12px 15px;
+            background-color: rgba(0, 255, 0, 0.1);
+            border-bottom: 1px solid var(--terminal-green);
+        }
+        
+        .database-list td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+            cursor: pointer;
+        }
+        
+        .database-list tr:hover {
+            background-color: rgba(0, 255, 0, 0.05);
+        }
+        
+        .database-list tr.selected {
+            background-color: rgba(0, 255, 0, 0.15);
+        }
+        
+        .list-name {
+            font-weight: bold;
+            color: var(--terminal-green);
+        }
+        
+        .list-size, .list-records {
+            text-align: center;
+            white-space: nowrap;
+        }
+        
+        .list-description {
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .list-tags {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        
+        .list-tag {
+            padding: 2px 6px;
+            font-size: 10px;
+            border-radius: 2px;
+            font-weight: bold;
+        }
+        
+        .list-tag.verified {
+            background: rgba(0, 255, 0, 0.2);
+            border: 1px solid var(--terminal-green);
+        }
+        
+        .list-tag.cdn {
+            background: rgba(0, 128, 255, 0.2);
+            border: 1px solid var(--status-blue);
+            color: var(--status-blue);
+        }
+        
+        .list-tag.infected {
+            background: rgba(255, 255, 0, 0.2);
+            border: 1px solid var(--warning-yellow);
+            color: var(--warning-yellow);
+        }
+        
+        .list-tag.no-cdn {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid var(--warning-red);
+            color: var(--warning-red);
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 5px;
+        }
+        
+        .pagination button {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid var(--terminal-green);
+            color: var(--terminal-green);
+            padding: 5px 10px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .pagination button:hover {
+            background: rgba(0, 255, 0, 0.2);
+        }
+        
+        .pagination button.active {
+            background: rgba(0, 255, 0, 0.3);
+            font-weight: bold;
+        }
+        
+        .list-status {
+            text-align: center;
+        }
+        
+        .status-online {
+            color: var(--terminal-green);
+        }
+        
+        .status-offline {
+            color: var(--warning-red);
+        }
+    </style>
 </head>
 <body>
     <div class="terminal-container">
@@ -28,181 +148,25 @@
                     <p class="section-subtitle">Leaked databases and data breaches</p>
                 </div>
 
-                <div class="database-grid" id="database-grid">
-                    <div class="database-card" data-url="https://heck.ai/">
-                        <div class="card-header">
-                            <div class="card-title">Corporate Email Leak 2024</div>
-                            <div class="status-indicator">
-                                <span class="status-offline">● CHECKING...</span>
-                            </div>
-                        </div>
+                <table class="database-list" id="database-list">
+                    <thead>
+                        <tr>
+                            <th style="width: 25%">NAME</th>
+                            <th style="width: 10%">SIZE</th>
+                            <th style="width: 10%">RECORDS</th>
+                            <th style="width: 15%">TAGS</th>
+                            <th style="width: 25%">DESCRIPTION</th>
+                            <th style="width: 10%">STATUS</th>
+                            <th style="width: 5%">SOURCE</th>
+                        </tr>
+                    </thead>
+                    <tbody id="database-list-body">
+                        <!-- Database items will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
 
-                        <div class="card-tags">
-                            <span class="tag verified"><i class="fas fa-shield-alt"></i> VERIFIED</span>
-                            <span class="tag cdn"><i class="fas fa-cloud"></i> CDN</span>
-                        </div>
-
-                        <div class="card-content">
-                            <div class="data-info">
-                                <div class="info-row">
-                                    <span class="label">SIZE:</span>
-                                    <span class="value">2.3 GB</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="label">RECORDS:</span>
-                                    <span class="value">1.2M records</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="label">DATA TYPE:</span>
-                                    <span class="value">Emails, passwords, personal info</span>
-                                </div>
-                            </div>
-                            
-                            <div class="description">
-                                Major corporate email database containing sensitive communications
-                            </div>
-                        </div>
-
-                        <div class="card-footer">
-                            <div class="breacher-info">
-                                <span class="label">BREACHED BY:</span>
-                                <a href="https://twitter.com/anon_collective" class="breacher-link" target="_blank">
-                                    Anonymous Collective
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="database-card" data-url="https://example.com/download/gov_files.rar">
-                        <div class="card-header">
-                            <div class="card-title">Government Personnel Files</div>
-                            <div class="status-indicator">
-                                <span class="status-offline">● CHECKING...</span>
-                            </div>
-                        </div>
-
-                        <div class="card-tags">
-                            <span class="tag infected"><i class="fas fa-exclamation-triangle"></i> POSSIBLY INFECTED</span>
-                            <span class="tag no-cdn"><i class="fas fa-times"></i> NOT ON CDN</span>
-                        </div>
-
-                        <div class="card-content">
-                            <div class="data-info">
-                                <div class="info-row">
-                                    <span class="label">SIZE:</span>
-                                    <span class="value">850 MB</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="label">RECORDS:</span>
-                                    <span class="value">450K records</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="label">DATA TYPE:</span>
-                                    <span class="value">SSN, addresses, clearance levels</span>
-                                </div>
-                            </div>
-                            
-                            <div class="description">
-                                Classified personnel files from government contractor
-                            </div>
-                        </div>
-
-                        <div class="card-footer">
-                            <div class="breacher-info">
-                                <span class="label">BREACHED BY:</span>
-                                <a href="https://darkweb.onion/shadow" class="breacher-link" target="_blank">
-                                    Shadow_Broker
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="database-card" data-url="https://example.com/download/bank_data.7z">
-                        <div class="card-header">
-                            <div class="card-title">Banking Customer Data</div>
-                            <div class="status-indicator">
-                                <span class="status-offline">● CHECKING...</span>
-                            </div>
-                        </div>
-
-                        <div class="card-tags">
-                            <span class="tag verified"><i class="fas fa-shield-alt"></i> VERIFIED</span>
-                            <span class="tag cdn"><i class="fas fa-cloud"></i> CDN</span>
-                        </div>
-
-                        <div class="card-content">
-                            <div class="data-info">
-                                <div class="info-row">
-                                    <span class="label">SIZE:</span>
-                                    <span class="value">4.1 GB</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="label">RECORDS:</span>
-                                    <span class="value">3.7M records</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="label">DATA TYPE:</span>
-                                    <span class="value">Account numbers, transactions, PII</span>
-                                </div>
-                            </div>
-                            
-                            <div class="description">
-                                Complete customer database from regional banking network
-                            </div>
-                        </div>
-
-                        <div class="card-footer">
-                            <div class="breacher-info">
-                                <span class="label">BREACHED BY:</span>
-                                <a href="https://telegram.me/cyberphantom" class="breacher-link" target="_blank">
-                                    CyberPhantom
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="database-card" data-url="https://offline-site.com/social.zip">
-                        <div class="card-header">
-                            <div class="card-title">Social Media Profiles</div>
-                            <div class="status-indicator">
-                                <span class="status-offline">● CHECKING...</span>
-                            </div>
-                        </div>
-
-                        <div class="card-tags">
-                            <span class="tag infected"><i class="fas fa-exclamation-triangle"></i> POSSIBLY INFECTED</span>
-                        </div>
-
-                        <div class="card-content">
-                            <div class="data-info">
-                                <div class="info-row">
-                                    <span class="label">SIZE:</span>
-                                    <span class="value">1.8 GB</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="label">RECORDS:</span>
-                                    <span class="value">2.1M records</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="label">DATA TYPE:</span>
-                                    <span class="value">Profiles, photos, private messages</span>
-                                </div>
-                            </div>
-                            
-                            <div class="description">
-                                Scraped social media data with private communications
-                            </div>
-                        </div>
-
-                        <div class="card-footer">
-                            <div class="breacher-info">
-                                <span class="label">BREACHED BY:</span>
-                                <a href="https://example.com/datahunter" class="breacher-link" target="_blank">
-                                    DataHunter
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                <div class="pagination" id="pagination">
+                    <!-- Pagination buttons will be inserted here by JavaScript -->
                 </div>
 
                 <div class="navigation-help">
@@ -227,6 +191,491 @@
         <source src="audio/error.wav" type="audio/wav">
     </audio>
 
-    <script src="js/main.js"></script>
+    <script>
+        // Database data
+        const databases = [
+            {
+                id: 1,
+                name: 'Corporate Email Leak 2024',
+                url: 'https://heck.ai/',
+                breacher: 'Anonymous Collective',
+                breacher_link: 'https://twitter.com/anon_collective',
+                data_size: '2.3 GB',
+                data_type: 'Emails, passwords, personal info',
+                record_count: '1.2M records',
+                tags: ['verified', 'cdn'],
+                description: 'Major corporate email database containing sensitive communications'
+            },
+            {
+                id: 2,
+                name: 'Government Personnel Files',
+                url: 'https://example.com/download/gov_files.rar',
+                breacher: 'Shadow_Broker',
+                breacher_link: 'https://darkweb.onion/shadow',
+                data_size: '850 MB',
+                data_type: 'SSN, addresses, clearance levels',
+                record_count: '450K records',
+                tags: ['possibly_infected', 'not_on_cdn'],
+                description: 'Classified personnel files from government contractor'
+            },
+            {
+                id: 3,
+                name: 'Banking Customer Data',
+                url: 'https://example.com/download/bank_data.7z',
+                breacher: 'CyberPhantom',
+                breacher_link: 'https://telegram.me/cyberphantom',
+                data_size: '4.1 GB',
+                data_type: 'Account numbers, transactions, PII',
+                record_count: '3.7M records',
+                tags: ['verified', 'cdn'],
+                description: 'Complete customer database from regional banking network'
+            },
+            {
+                id: 4,
+                name: 'Social Media Profiles',
+                url: 'https://offline-site.com/social.zip',
+                breacher: 'DataHunter',
+                breacher_link: 'https://example.com/datahunter',
+                data_size: '1.8 GB',
+                data_type: 'Profiles, photos, private messages',
+                record_count: '2.1M records',
+                tags: ['possibly_infected'],
+                description: 'Scraped social media data with private communications'
+            },
+            {
+                id: 5,
+                name: 'Healthcare Records 2023',
+                url: 'http://medleakz.onion/health23.rar',
+                breacher: 'WhiteCoat',
+                breacher_link: 'https://darkweb.onion/whitecoat',
+                data_size: '3.5 GB',
+                data_type: 'Medical history, insurance data',
+                record_count: '2.8M records',
+                tags: ['verified'],
+                description: 'Confidential patient records from healthcare provider'
+            },
+            {
+                id: 6,
+                name: 'E-commerce User Data',
+                url: 'http://shopexposed.onion/customers.zip',
+                breacher: 'RetailRaid',
+                breacher_link: 'https://telegram.me/retailraid',
+                data_size: '1.2 GB',
+                data_type: 'Purchase history, credit cards',
+                record_count: '5.4M records',
+                tags: ['cdn'],
+                description: 'Customer transaction data from online retailer'
+            },
+            {
+                id: 7,
+                name: 'Educational Institution Records',
+                url: 'http://edu-leak.onion/students.7z',
+                breacher: 'ScholarHack',
+                breacher_link: 'https://example.com/scholarhack',
+                data_size: '980 MB',
+                data_type: 'Grades, personal info, financial aid',
+                record_count: '1.7M records',
+                tags: ['possibly_infected'],
+                description: 'Student and faculty records from university system'
+            },
+            {
+                id: 8,
+                name: 'Military Contractor Documents',
+                url: 'http://armorbreach.onion/contracts.zip',
+                breacher: 'DefenseLeak',
+                breacher_link: 'https://darkweb.onion/defenseleak',
+                data_size: '6.2 GB',
+                data_type: 'Contracts, schematics, personnel',
+                record_count: '850K records',
+                tags: ['verified', 'cdn'],
+                description: 'Sensitive defense contractor documentation'
+            },
+            {
+                id: 9,
+                name: 'Telecom Customer Database',
+                url: 'http://phonetap.onion/subscribers.bin',
+                breacher: 'SignalTap',
+                breacher_link: 'https://telegram.me/signaltap',
+                data_size: '2.9 GB',
+                data_type: 'Call records, locations, billing',
+                record_count: '4.3M records',
+                tags: ['cdn'],
+                description: 'Complete customer database from telecom provider'
+            },
+            {
+                id: 10,
+                name: 'Gaming Platform User Info',
+                url: 'http://playerexposed.onion/gamers.rar',
+                breacher: 'GameOver',
+                breacher_link: 'https://example.com/gameover',
+                data_size: '1.5 GB',
+                data_type: 'Accounts, payment methods, gameplay stats',
+                record_count: '3.2M records',
+                tags: ['possibly_infected', 'not_on_cdn'],
+                description: 'User data from popular gaming platform breach'
+            },
+            {
+                id: 11,
+                name: 'Airline Passenger Records',
+                url: 'http://flightdata.onion/passengers.zip',
+                breacher: 'SkyJack',
+                breacher_link: 'https://darkweb.onion/skyjack',
+                data_size: '2.1 GB',
+                data_type: 'Travel history, passport info, payments',
+                record_count: '6.7M records',
+                tags: ['verified'],
+                description: 'Complete passenger database from international airline'
+            },
+            {
+                id: 12,
+                name: 'Cryptocurrency Exchange Data',
+                url: 'http://coinleak.onion/users.db',
+                breacher: 'CryptoThief',
+                breacher_link: 'https://telegram.me/cryptothief',
+                data_size: '890 MB',
+                data_type: 'Wallet addresses, transactions, KYC data',
+                record_count: '2.5M records',
+                tags: ['cdn'],
+                description: 'User data from hacked cryptocurrency exchange'
+            }
+        ];
+
+        // Pagination settings
+        const itemsPerPage = 5;
+        let currentPage = 1;
+        
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            renderDatabaseList();
+            setupPagination();
+            
+            // Initialize hacker interface
+            const hackerInterface = new HackerInterface();
+        });
+        
+        // Render database list based on current page
+        function renderDatabaseList() {
+            const listBody = document.getElementById('database-list-body');
+            listBody.innerHTML = '';
+            
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, databases.length);
+            
+            for (let i = startIndex; i < endIndex; i++) {
+                const db = databases[i];
+                const row = document.createElement('tr');
+                row.classList.add('database-item');
+                row.dataset.url = db.url;
+                
+                // Create tag elements
+                let tagHtml = '';
+                if (db.tags && db.tags.length > 0) {
+                    tagHtml = '<div class="list-tags">';
+                    db.tags.forEach(tag => {
+                        let tagClass = '';
+                        let tagIcon = '';
+                        
+                        if (tag === 'verified') {
+                            tagClass = 'verified';
+                            tagIcon = '<i class="fas fa-shield-alt"></i> ';
+                        } else if (tag === 'cdn') {
+                            tagClass = 'cdn';
+                            tagIcon = '<i class="fas fa-cloud"></i> ';
+                        } else if (tag === 'possibly_infected') {
+                            tagClass = 'infected';
+                            tagIcon = '<i class="fas fa-exclamation-triangle"></i> ';
+                        } else if (tag === 'not_on_cdn') {
+                            tagClass = 'no-cdn';
+                            tagIcon = '<i class="fas fa-times"></i> ';
+                        }
+                        
+                        tagHtml += `<span class="list-tag ${tagClass}">${tagIcon}${tag.toUpperCase().replace('_', ' ')}</span>`;
+                    });
+                    tagHtml += '</div>';
+                }
+                
+                row.innerHTML = `
+                    <td class="list-name">${db.name}</td>
+                    <td class="list-size">${db.data_size}</td>
+                    <td class="list-records">${db.record_count}</td>
+                    <td>${tagHtml}</td>
+                    <td class="list-description">${db.description}</td>
+                    <td class="list-status"><span class="status-offline">● OFFLINE</span></td>
+                    <td><a href="${db.breacher_link}" class="breacher-link" target="_blank"><i class="fas fa-external-link-alt"></i></a></td>
+                `;
+                
+                listBody.appendChild(row);
+            }
+            
+            // Update current items for navigation
+            if (window.hackerInterface) {
+                window.hackerInterface.updateCurrentItems();
+            }
+        }
+        
+        // Setup pagination buttons
+        function setupPagination() {
+            const paginationDiv = document.getElementById('pagination');
+            paginationDiv.innerHTML = '';
+            
+            const totalPages = Math.ceil(databases.length / itemsPerPage);
+            
+            // Previous button
+            if (currentPage > 1) {
+                const prevButton = document.createElement('button');
+                prevButton.innerHTML = '◀';
+                prevButton.addEventListener('click', () => {
+                    currentPage--;
+                    renderDatabaseList();
+                    setupPagination();
+                });
+                paginationDiv.appendChild(prevButton);
+            }
+            
+            // Page buttons
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+            
+            if (endPage - startPage + 1 < maxVisiblePages) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+            
+            for (let i = startPage; i <= endPage; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.textContent = i;
+                pageButton.classList.toggle('active', i === currentPage);
+                pageButton.addEventListener('click', () => {
+                    currentPage = i;
+                    renderDatabaseList();
+                    setupPagination();
+                });
+                paginationDiv.appendChild(pageButton);
+            }
+            
+            // Next button
+            if (currentPage < totalPages) {
+                const nextButton = document.createElement('button');
+                nextButton.innerHTML = '▶';
+                nextButton.addEventListener('click', () => {
+                    currentPage++;
+                    renderDatabaseList();
+                    setupPagination();
+                });
+                paginationDiv.appendChild(nextButton);
+            }
+            
+            // Page info
+            const pageInfo = document.createElement('span');
+            pageInfo.textContent = `Page ${currentPage} of ${totalPages} (${databases.length} databases)`;
+            pageInfo.style.marginLeft = '15px';
+            pageInfo.style.color = 'var(--terminal-green)';
+            paginationDiv.appendChild(pageInfo);
+        }
+        
+        // Hacker Interface Class
+        class HackerInterface {
+            constructor() {
+                this.currentSelection = 0;
+                this.currentItems = [];
+                this.sounds = {
+                    keypress: document.getElementById('keypress-sound'),
+                    select: document.getElementById('select-sound'),
+                    error: document.getElementById('error-sound')
+                };
+                this.init();
+                
+                // Make it accessible globally
+                window.hackerInterface = this;
+            }
+
+            init() {
+                this.updateTime();
+                setInterval(() => this.updateTime(), 1000);
+                
+                this.hideBoot();
+                this.bindEvents();
+                this.updateCurrentItems();
+            }
+
+            updateTime() {
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString('en-US', { 
+                    hour12: false, 
+                    timeZone: 'UTC' 
+                }) + ' UTC';
+                document.getElementById('current-time').textContent = timeStr;
+            }
+
+            hideBoot() {
+                setTimeout(() => {
+                    const bootSequence = document.getElementById('boot-sequence');
+                    const mainContent = document.getElementById('main-content');
+                    if (bootSequence) {
+                        bootSequence.style.display = 'none';
+                    }
+                    if (mainContent) {
+                        mainContent.style.opacity = '1';
+                    }
+                }, 4500);
+            }
+
+            playSound(type) {
+                if (this.sounds[type]) {
+                    this.sounds[type].currentTime = 0;
+                    this.sounds[type].play().catch(() => {
+                        // Ignore audio play errors
+                    });
+                }
+            }
+
+            bindEvents() {
+                document.addEventListener('keydown', (e) => {
+                    this.handleKeyPress(e);
+                });
+
+                // Add click handlers
+                document.addEventListener('click', (e) => {
+                    const listItem = e.target.closest('.database-item');
+                    if (listItem) {
+                        this.selectItem(listItem);
+                    }
+
+                    const breacherLink = e.target.closest('.breacher-link');
+                    if (breacherLink) {
+                        e.stopPropagation();
+                        window.open(breacherLink.href, '_blank');
+                    }
+                });
+            }
+
+            handleKeyPress(e) {
+                switch(e.key) {
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        this.navigateUp();
+                        this.playSound('keypress');
+                        break;
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        this.navigateDown();
+                        this.playSound('keypress');
+                        break;
+                    case 'Enter':
+                        e.preventDefault();
+                        this.selectCurrent();
+                        this.playSound('select');
+                        break;
+                    case 'Escape':
+                        e.preventDefault();
+                        this.goBack();
+                        this.playSound('keypress');
+                        break;
+                }
+            }
+
+            updateCurrentItems() {
+                this.currentItems = Array.from(document.querySelectorAll('.database-item'));
+                this.currentSelection = 0;
+                this.updateSelection();
+            }
+
+            navigateUp() {
+                if (this.currentItems.length === 0) return;
+                
+                this.currentSelection = this.currentSelection > 0 
+                    ? this.currentSelection - 1 
+                    : this.currentItems.length - 1;
+                
+                this.updateSelection();
+            }
+
+            navigateDown() {
+                if (this.currentItems.length === 0) return;
+                
+                this.currentSelection = this.currentSelection < this.currentItems.length - 1 
+                    ? this.currentSelection + 1 
+                    : 0;
+                
+                this.updateSelection();
+            }
+
+            updateSelection() {
+                this.currentItems.forEach(item => item.classList.remove('selected'));
+                
+                if (this.currentItems[this.currentSelection]) {
+                    this.currentItems[this.currentSelection].classList.add('selected');
+                    this.currentItems[this.currentSelection].scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest'
+                    });
+                }
+            }
+
+            selectCurrent() {
+                if (this.currentItems[this.currentSelection]) {
+                    this.selectItem(this.currentItems[this.currentSelection]);
+                }
+            }
+
+            selectItem(item) {
+                const url = item.dataset.url;
+                if (url) {
+                    this.showLoadingEffect();
+                    window.open(url, '_blank');
+                }
+            }
+
+            goBack() {
+                this.showLoadingEffect();
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 300);
+            }
+
+            showLoadingEffect() {
+                const overlay = document.createElement('div');
+                overlay.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.8);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 9999;
+                    color: #00ff00;
+                    font-family: 'Courier New', monospace;
+                    font-size: 18px;
+                `;
+                
+                overlay.innerHTML = `
+                    <div style="text-align: center;">
+                        <div style="margin-bottom: 20px;">LOADING...</div>
+                        <div style="width: 200px; height: 2px; background: #333; margin: 0 auto;">
+                            <div style="height: 100%; background: #00ff00; width: 0%; animation: progress 1s ease-in-out forwards;"></div>
+                        </div>
+                    </div>
+                `;
+                
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes progress {
+                        to { width: 100%; }
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                document.body.appendChild(overlay);
+                
+                setTimeout(() => {
+                    overlay.remove();
+                    style.remove();
+                }, 1500);
+            }
+        }
+    </script>
 </body>
 </html>
