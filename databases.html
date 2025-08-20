@@ -269,6 +269,21 @@
             text-decoration: underline;
         }
         
+        /* Download button */
+        .download-btn {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid var(--terminal-green);
+            color: var(--terminal-green);
+            padding: 5px 10px;
+            cursor: pointer;
+            font-family: 'Courier Prime', monospace;
+            font-size: 12px;
+        }
+        
+        .download-btn:hover {
+            background: rgba(0, 255, 0, 0.2);
+        }
+        
         /* Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
@@ -335,7 +350,7 @@
                             <th style="width: 15%">TAGS</th>
                             <th style="width: 25%">DESCRIPTION</th>
                             <th style="width: 10%">STATUS</th>
-                            <th style="width: 5%">SOURCE</th>
+                            <th style="width: 5%">ACTION</th>
                         </tr>
                     </thead>
                     <tbody id="database-list-body">
@@ -359,18 +374,8 @@
         </div>
     </div>
 
-    <audio id="keypress-sound" preload="auto">
-        <source src="audio/keypress.wav" type="audio/wav">
-    </audio>
-    <audio id="select-sound" preload="auto">
-        <source src="audio/select.wav" type="audio/wav">
-    </audio>
-    <audio id="error-sound" preload="auto">
-        <source src="audio/error.wav" type="audio/wav">
-    </audio>
-
     <script>
-        // Database data
+        // Database data with updated information
         const databases = [
             {
                 id: 1,
@@ -380,7 +385,7 @@
                 breacher_link: 'nan',
                 data_size: '1.9MB',
                 data_type: 'sh_history, bash_history, profiles, reports, keys, passwords, Personal Information.',
-                record_count: '?',
+                record_count: '~1,200 records',
                 tags: ['verified', 'cdn'],
                 description: 'National Police Spain database, reports, logs that were stolen from an employee.'
             },
@@ -392,9 +397,9 @@
                 breacher_link: 'nan',
                 data_size: '26.2 MB',
                 data_type: 'emails, messages, confidential documents, phone numbers',
-                record_count: '?',
+                record_count: '~5,000 records',
                 tags: ['verified', 'cdn'],
-                description: 'https://darkwebinformer.com/content/images/size/w1304/format/webp/2025/03/1298419827498172-1.png'
+                description: 'Confidential documents from Uruguay\'s aviation authority leaked by LaPompaLeaks'
             },
             {
                 id: 3,
@@ -473,6 +478,7 @@
                 const row = document.createElement('tr');
                 row.classList.add('database-item');
                 row.dataset.url = db.url;
+                row.dataset.id = db.id;
                 
                 // Create tag elements
                 let tagHtml = '';
@@ -501,18 +507,39 @@
                     tagHtml += '</div>';
                 }
                 
+                // Check if URL is valid for status
+                const isValidUrl = db.url && !db.url.includes('example.com') && !db.url.includes('offline-site.com');
+                const statusClass = isValidUrl ? 'status-online' : 'status-offline';
+                const statusText = isValidUrl ? '● ONLINE' : '● OFFLINE';
+                
                 row.innerHTML = `
                     <td class="list-name">${db.name}</td>
                     <td class="list-size">${db.data_size}</td>
                     <td class="list-records">${db.record_count}</td>
                     <td>${tagHtml}</td>
                     <td class="list-description">${db.description}</td>
-                    <td class="list-status"><span class="status-offline">● OFFLINE</span></td>
-                    <td><a href="${db.breacher_link}" class="breacher-link" target="_blank"><i class="fas fa-external-link-alt"></i></a></td>
+                    <td class="list-status"><span class="${statusClass}">${statusText}</span></td>
+                    <td>
+                        <button class="download-btn" data-id="${db.id}">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </td>
                 `;
                 
                 listBody.appendChild(row);
             }
+            
+            // Add event listeners to download buttons
+            document.querySelectorAll('.download-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const dbId = this.getAttribute('data-id');
+                    const db = databases.find(d => d.id == dbId);
+                    if (db) {
+                        initiateDownload(db);
+                    }
+                });
+            });
             
             // Update current items for navigation
             if (window.hackerInterface) {
@@ -580,6 +607,21 @@
             paginationDiv.appendChild(pageInfo);
         }
         
+        // Initialize download process
+        function initiateDownload(db) {
+            if (!db.url || db.url.includes('example.com') || db.url.includes('offline-site.com')) {
+                alert('Download unavailable: This database is currently offline or the source is invalid.');
+                return;
+            }
+            
+            window.hackerInterface.showLoadingEffect();
+            
+            // Open the actual URL in a new tab after a short delay
+            setTimeout(() => {
+                window.open(db.url, '_blank');
+            }, 1500);
+        }
+        
         // Initialize hacker interface
         function initHackerInterface() {
             window.hackerInterface = {
@@ -612,7 +654,6 @@
                         : this.currentItems.length - 1;
                     
                     this.updateSelection();
-                    this.playSound('keypress');
                 },
                 
                 navigateDown: function() {
@@ -623,25 +664,16 @@
                         : 0;
                     
                     this.updateSelection();
-                    this.playSound('keypress');
                 },
                 
                 selectCurrent: function() {
                     if (this.currentItems[this.currentSelection]) {
-                        this.selectItem(this.currentItems[this.currentSelection]);
+                        const dbId = this.currentItems[this.currentSelection].dataset.id;
+                        const db = databases.find(d => d.id == dbId);
+                        if (db) {
+                            initiateDownload(db);
+                        }
                     }
-                },
-                
-                selectItem: function(item) {
-                    const url = item.dataset.url;
-                    if (url) {
-                        this.showLoadingEffect();
-                        window.open(url, '_blank');
-                    }
-                },
-                
-                playSound: function(type) {
-                    // Sound implementation would go here
                 },
                 
                 showLoadingEffect: function() {
@@ -664,7 +696,7 @@
                     
                     overlay.innerHTML = `
                         <div style="text-align: center;">
-                            <div style="margin-bottom: 20px;">LOADING...</div>
+                            <div style="margin-bottom: 20px;">INITIATING SECURE DOWNLOAD...</div>
                             <div style="width: 200px; height: 2px; background: #333; margin: 0 auto;">
                                 <div style="height: 100%; background: #00ff00; width: 0%; animation: progress 1s ease-in-out forwards;"></div>
                             </div>
@@ -714,7 +746,11 @@
             document.addEventListener('click', (e) => {
                 const listItem = e.target.closest('.database-item');
                 if (listItem) {
-                    window.hackerInterface.selectItem(listItem);
+                    const dbId = listItem.dataset.id;
+                    const db = databases.find(d => d.id == dbId);
+                    if (db) {
+                        initiateDownload(db);
+                    }
                 }
 
                 const breacherLink = e.target.closest('.breacher-link');
