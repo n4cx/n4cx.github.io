@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABOUT - DARKNET ARCHIVE</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="terminal-container">
+        <div class="terminal-header">
+            <span class="terminal-title">█ DARKNET DATABASE ARCHIVE v2.1.0 █</span>
+            <span class="terminal-time" id="current-time"></span>
+        </div>
+        
+        <div class="boot-sequence" id="boot-sequence">
+            <div class="boot-line">INITIALIZING SECURE CONNECTION...</div>
+            <div class="boot-line">LOADING ENCRYPTED DATABASES...</div>
+            <div class="boot-line">VERIFYING INTEGRITY...</div>
+            <div class="boot-line">ACCESS GRANTED</div>
+        </div>
+
+        <main class="main-content" id="main-content">
+            <div class="about-container">
+                <div class="section-header">
+                    <h1><i class="fas fa-info-circle"></i> ABOUT DARKNET ARCHIVE</h1>
+                </div>
+
+                <div class="about-content">
+                    <div class="info-section">
+                        <h2>MISSION STATEMENT</h2>
+                        <p>
+                            This archive serves as a repository for leaked databases and classified information
+                            in the interest of transparency and public awareness. All data has been obtained
+                            through various security breaches and whistleblower disclosures.
+                        </p>
+                    </div>
+
+                    <div class="info-section">
+                        <h2>SECURITY NOTICE</h2>
+                        <p>
+                            • All connections are encrypted and anonymized<br>
+                            • Downloads are verified for integrity<br>
+                            • Some files may contain malware - scan before use<br>
+                            • Access logs are not maintained for user privacy
+                        </p>
+                    </div>
+
+                    <div class="info-section">
+                        <h2>LEGAL DISCLAIMER</h2>
+                        <p>
+                            The operators of this archive do not condone illegal activity.
+                            This information is provided for educational and research purposes only.
+                            Users are responsible for compliance with local laws and regulations.
+                        </p>
+                    </div>
+
+                    <div class="info-section">
+                        <h2>CONTACT</h2>
+                        <p>
+                            For submissions or security concerns:<br>
+                            • PGP: 1A2B 3C4D 5E6F 7G8H<br>
+                            • Tor: darkarch2x3y4z5.onion<br>
+                            • Signal: +1-555-SECURE
+                        </p>
+                    </div>
+
+                    <div class="stats-section">
+                        <h2>ARCHIVE STATISTICS</h2>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-number">4</div>
+                                <div class="stat-label">Databases</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">2</div>
+                                <div class="stat-label">Classified Files</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">847</div>
+                                <div class="stat-label">GB Total</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">23.4M</div>
+                                <div class="stat-label">Records</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="navigation-help">
+                    <p>► ESC: Back to menu</p>
+                </div>
+            </div>
+        </main>
+
+        <div class="status-bar">
+            <span>SECURE | ENCRYPTED | TOR ENABLED</span>
+            <span id="connection-status">● ONLINE</span>
+        </div>
+    </div>
+
+    <audio id="keypress-sound" preload="auto">
+        <source src="audio/keypress.wav" type="audio/wav">
+    </audio>
+    <audio id="select-sound" preload="auto">
+        <source src="audio/select.wav" type="audio/wav">
+    </audio>
+    <audio id="error-sound" preload="auto">
+        <source src="audio/error.wav" type="audio/wav">
+    </audio>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

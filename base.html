@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DARKNET ARCHIVE</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="terminal-container">
+        <div class="terminal-header">
+            <span class="terminal-title">█ DARKNET DATABASE ARCHIVE v2.1.0 █</span>
+            <span class="terminal-time" id="current-time"></span>
+        </div>
+        
+        <div class="boot-sequence" id="boot-sequence">
+            <div class="boot-line">INITIALIZING SECURE CONNECTION...</div>
+            <div class="boot-line">LOADING ENCRYPTED DATABASES...</div>
+            <div class="boot-line">VERIFYING INTEGRITY...</div>
+            <div class="boot-line">ACCESS GRANTED</div>
+        </div>
+
+        <main class="main-content" id="main-content">
+            <!-- Content will be inserted here by each page -->
+        </main>
+
+        <div class="status-bar">
+            <span>SECURE | ENCRYPTED | TOR ENABLED</span>
+            <span id="connection-status">● ONLINE</span>
+        </div>
+    </div>
+
+    <audio id="keypress-sound" preload="auto">
+        <source src="audio/keypress.wav" type="audio/wav">
+    </audio>
+    <audio id="select-sound" preload="auto">
+        <source src="audio/select.wav" type="audio/wav">
+    </audio>
+    <audio id="error-sound" preload="auto">
+        <source src="audio/error.wav" type="audio/wav">
+    </audio>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
