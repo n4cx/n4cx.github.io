@@ -4,9 +4,142 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DATABASE ARCHIVES - DARKNET ARCHIVE</title>
-    <link rel="stylesheet" href="css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        /* Base styles */
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
+        
+        :root {
+            --terminal-green: #00ff00;
+            --dark-green: #008000;
+            --terminal-bg: #000000;
+            --terminal-border: #333333;
+            --warning-red: #ff0000;
+            --warning-yellow: #ffff00;
+            --status-blue: #0080ff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier Prime', monospace;
+            background: var(--terminal-bg);
+            color: var(--terminal-green);
+            overflow: hidden;
+            height: 100vh;
+        }
+        
+        .terminal-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            border: 2px solid var(--terminal-border);
+            position: relative;
+        }
+        
+        .terminal-header {
+            background: var(--dark-green);
+            color: var(--terminal-bg);
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .terminal-title {
+            letter-spacing: 2px;
+        }
+        
+        #current-time {
+            font-size: 12px;
+        }
+        
+        .boot-sequence {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            background: var(--terminal-bg);
+            padding: 20px;
+            border: 1px solid var(--terminal-green);
+            min-width: 400px;
+        }
+        
+        .boot-line {
+            margin: 10px 0;
+            opacity: 0;
+            animation: typewriter 0.5s forwards;
+        }
+        
+        .boot-line:nth-child(1) { animation-delay: 0s; }
+        .boot-line:nth-child(2) { animation-delay: 1s; }
+        .boot-line:nth-child(3) { animation-delay: 2s; }
+        .boot-line:nth-child(4) { animation-delay: 3s; }
+        
+        @keyframes typewriter {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards 4s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .status-bar {
+            background: var(--terminal-border);
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            border-top: 1px solid var(--terminal-green);
+        }
+        
+        #connection-status {
+            color: var(--status-blue);
+        }
+        
+        /* Section headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .section-header h1 {
+            font-size: 24px;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px var(--terminal-green);
+        }
+        
+        .section-subtitle {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+        
+        /* Navigation help */
+        .navigation-help {
+            text-align: center;
+            margin-top: 20px;
+            opacity: 0.6;
+            font-size: 12px;
+        }
+        
         /* List view styles */
         .database-list {
             width: 100%;
@@ -102,7 +235,7 @@
             color: var(--terminal-green);
             padding: 5px 10px;
             cursor: pointer;
-            font-family: 'Courier New', monospace;
+            font-family: 'Courier Prime', monospace;
         }
         
         .pagination button:hover {
@@ -124,6 +257,51 @@
         
         .status-offline {
             color: var(--warning-red);
+        }
+        
+        /* Breacher link */
+        .breacher-link {
+            color: var(--status-blue);
+            text-decoration: none;
+        }
+        
+        .breacher-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--terminal-bg);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--terminal-green);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--dark-green);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .database-list {
+                font-size: 12px;
+            }
+            
+            .database-list th, 
+            .database-list td {
+                padding: 8px 10px;
+            }
+            
+            .list-tags {
+                flex-direction: column;
+                gap: 2px;
+            }
         }
     </style>
 </head>
@@ -265,78 +443,6 @@
                 record_count: '5.4M records',
                 tags: ['cdn'],
                 description: 'Customer transaction data from online retailer'
-            },
-            {
-                id: 7,
-                name: 'Educational Institution Records',
-                url: 'http://edu-leak.onion/students.7z',
-                breacher: 'ScholarHack',
-                breacher_link: 'https://example.com/scholarhack',
-                data_size: '980 MB',
-                data_type: 'Grades, personal info, financial aid',
-                record_count: '1.7M records',
-                tags: ['possibly_infected'],
-                description: 'Student and faculty records from university system'
-            },
-            {
-                id: 8,
-                name: 'Military Contractor Documents',
-                url: 'http://armorbreach.onion/contracts.zip',
-                breacher: 'DefenseLeak',
-                breacher_link: 'https://darkweb.onion/defenseleak',
-                data_size: '6.2 GB',
-                data_type: 'Contracts, schematics, personnel',
-                record_count: '850K records',
-                tags: ['verified', 'cdn'],
-                description: 'Sensitive defense contractor documentation'
-            },
-            {
-                id: 9,
-                name: 'Telecom Customer Database',
-                url: 'http://phonetap.onion/subscribers.bin',
-                breacher: 'SignalTap',
-                breacher_link: 'https://telegram.me/signaltap',
-                data_size: '2.9 GB',
-                data_type: 'Call records, locations, billing',
-                record_count: '4.3M records',
-                tags: ['cdn'],
-                description: 'Complete customer database from telecom provider'
-            },
-            {
-                id: 10,
-                name: 'Gaming Platform User Info',
-                url: 'http://playerexposed.onion/gamers.rar',
-                breacher: 'GameOver',
-                breacher_link: 'https://example.com/gameover',
-                data_size: '1.5 GB',
-                data_type: 'Accounts, payment methods, gameplay stats',
-                record_count: '3.2M records',
-                tags: ['possibly_infected', 'not_on_cdn'],
-                description: 'User data from popular gaming platform breach'
-            },
-            {
-                id: 11,
-                name: 'Airline Passenger Records',
-                url: 'http://flightdata.onion/passengers.zip',
-                breacher: 'SkyJack',
-                breacher_link: 'https://darkweb.onion/skyjack',
-                data_size: '2.1 GB',
-                data_type: 'Travel history, passport info, payments',
-                record_count: '6.7M records',
-                tags: ['verified'],
-                description: 'Complete passenger database from international airline'
-            },
-            {
-                id: 12,
-                name: 'Cryptocurrency Exchange Data',
-                url: 'http://coinleak.onion/users.db',
-                breacher: 'CryptoThief',
-                breacher_link: 'https://telegram.me/cryptothief',
-                data_size: '890 MB',
-                data_type: 'Wallet addresses, transactions, KYC data',
-                record_count: '2.5M records',
-                tags: ['cdn'],
-                description: 'User data from hacked cryptocurrency exchange'
             }
         ];
 
@@ -348,9 +454,10 @@
         document.addEventListener('DOMContentLoaded', function() {
             renderDatabaseList();
             setupPagination();
-            
-            // Initialize hacker interface
-            const hackerInterface = new HackerInterface();
+            initHackerInterface();
+            hideBootSequence();
+            updateTime();
+            setInterval(updateTime, 1000);
         });
         
         // Render database list based on current page
@@ -473,207 +580,179 @@
             paginationDiv.appendChild(pageInfo);
         }
         
-        // Hacker Interface Class
-        class HackerInterface {
-            constructor() {
-                this.currentSelection = 0;
-                this.currentItems = [];
-                this.sounds = {
-                    keypress: document.getElementById('keypress-sound'),
-                    select: document.getElementById('select-sound'),
-                    error: document.getElementById('error-sound')
-                };
-                this.init();
+        // Initialize hacker interface
+        function initHackerInterface() {
+            window.hackerInterface = {
+                currentSelection: 0,
+                currentItems: [],
                 
-                // Make it accessible globally
-                window.hackerInterface = this;
-            }
-
-            init() {
-                this.updateTime();
-                setInterval(() => this.updateTime(), 1000);
+                updateCurrentItems: function() {
+                    this.currentItems = Array.from(document.querySelectorAll('.database-item'));
+                    this.currentSelection = 0;
+                    this.updateSelection();
+                },
                 
-                this.hideBoot();
-                this.bindEvents();
-                this.updateCurrentItems();
-            }
-
-            updateTime() {
-                const now = new Date();
-                const timeStr = now.toLocaleTimeString('en-US', { 
-                    hour12: false, 
-                    timeZone: 'UTC' 
-                }) + ' UTC';
-                document.getElementById('current-time').textContent = timeStr;
-            }
-
-            hideBoot() {
-                setTimeout(() => {
-                    const bootSequence = document.getElementById('boot-sequence');
-                    const mainContent = document.getElementById('main-content');
-                    if (bootSequence) {
-                        bootSequence.style.display = 'none';
+                updateSelection: function() {
+                    this.currentItems.forEach(item => item.classList.remove('selected'));
+                    
+                    if (this.currentItems[this.currentSelection]) {
+                        this.currentItems[this.currentSelection].classList.add('selected');
+                        this.currentItems[this.currentSelection].scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'nearest'
+                        });
                     }
-                    if (mainContent) {
-                        mainContent.style.opacity = '1';
+                },
+                
+                navigateUp: function() {
+                    if (this.currentItems.length === 0) return;
+                    
+                    this.currentSelection = this.currentSelection > 0 
+                        ? this.currentSelection - 1 
+                        : this.currentItems.length - 1;
+                    
+                    this.updateSelection();
+                    this.playSound('keypress');
+                },
+                
+                navigateDown: function() {
+                    if (this.currentItems.length === 0) return;
+                    
+                    this.currentSelection = this.currentSelection < this.currentItems.length - 1 
+                        ? this.currentSelection + 1 
+                        : 0;
+                    
+                    this.updateSelection();
+                    this.playSound('keypress');
+                },
+                
+                selectCurrent: function() {
+                    if (this.currentItems[this.currentSelection]) {
+                        this.selectItem(this.currentItems[this.currentSelection]);
                     }
-                }, 4500);
-            }
-
-            playSound(type) {
-                if (this.sounds[type]) {
-                    this.sounds[type].currentTime = 0;
-                    this.sounds[type].play().catch(() => {
-                        // Ignore audio play errors
-                    });
+                },
+                
+                selectItem: function(item) {
+                    const url = item.dataset.url;
+                    if (url) {
+                        this.showLoadingEffect();
+                        window.open(url, '_blank');
+                    }
+                },
+                
+                playSound: function(type) {
+                    // Sound implementation would go here
+                },
+                
+                showLoadingEffect: function() {
+                    const overlay = document.createElement('div');
+                    overlay.style.cssText = `
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(0, 0, 0, 0.8);
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        z-index: 9999;
+                        color: #00ff00;
+                        font-family: 'Courier Prime', monospace;
+                        font-size: 18px;
+                    `;
+                    
+                    overlay.innerHTML = `
+                        <div style="text-align: center;">
+                            <div style="margin-bottom: 20px;">LOADING...</div>
+                            <div style="width: 200px; height: 2px; background: #333; margin: 0 auto;">
+                                <div style="height: 100%; background: #00ff00; width: 0%; animation: progress 1s ease-in-out forwards;"></div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    const style = document.createElement('style');
+                    style.textContent = `
+                        @keyframes progress {
+                            to { width: 100%; }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                    
+                    document.body.appendChild(overlay);
+                    
+                    setTimeout(() => {
+                        overlay.remove();
+                        style.remove();
+                    }, 1500);
                 }
-            }
-
-            bindEvents() {
-                document.addEventListener('keydown', (e) => {
-                    this.handleKeyPress(e);
-                });
-
-                // Add click handlers
-                document.addEventListener('click', (e) => {
-                    const listItem = e.target.closest('.database-item');
-                    if (listItem) {
-                        this.selectItem(listItem);
-                    }
-
-                    const breacherLink = e.target.closest('.breacher-link');
-                    if (breacherLink) {
-                        e.stopPropagation();
-                        window.open(breacherLink.href, '_blank');
-                    }
-                });
-            }
-
-            handleKeyPress(e) {
+            };
+            
+            // Bind keyboard events
+            document.addEventListener('keydown', (e) => {
                 switch(e.key) {
                     case 'ArrowUp':
                         e.preventDefault();
-                        this.navigateUp();
-                        this.playSound('keypress');
+                        window.hackerInterface.navigateUp();
                         break;
                     case 'ArrowDown':
                         e.preventDefault();
-                        this.navigateDown();
-                        this.playSound('keypress');
+                        window.hackerInterface.navigateDown();
                         break;
                     case 'Enter':
                         e.preventDefault();
-                        this.selectCurrent();
-                        this.playSound('select');
+                        window.hackerInterface.selectCurrent();
                         break;
                     case 'Escape':
                         e.preventDefault();
-                        this.goBack();
-                        this.playSound('keypress');
+                        window.location.href = 'index.html';
                         break;
                 }
-            }
-
-            updateCurrentItems() {
-                this.currentItems = Array.from(document.querySelectorAll('.database-item'));
-                this.currentSelection = 0;
-                this.updateSelection();
-            }
-
-            navigateUp() {
-                if (this.currentItems.length === 0) return;
-                
-                this.currentSelection = this.currentSelection > 0 
-                    ? this.currentSelection - 1 
-                    : this.currentItems.length - 1;
-                
-                this.updateSelection();
-            }
-
-            navigateDown() {
-                if (this.currentItems.length === 0) return;
-                
-                this.currentSelection = this.currentSelection < this.currentItems.length - 1 
-                    ? this.currentSelection + 1 
-                    : 0;
-                
-                this.updateSelection();
-            }
-
-            updateSelection() {
-                this.currentItems.forEach(item => item.classList.remove('selected'));
-                
-                if (this.currentItems[this.currentSelection]) {
-                    this.currentItems[this.currentSelection].classList.add('selected');
-                    this.currentItems[this.currentSelection].scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'nearest'
-                    });
+            });
+            
+            // Bind click events
+            document.addEventListener('click', (e) => {
+                const listItem = e.target.closest('.database-item');
+                if (listItem) {
+                    window.hackerInterface.selectItem(listItem);
                 }
-            }
 
-            selectCurrent() {
-                if (this.currentItems[this.currentSelection]) {
-                    this.selectItem(this.currentItems[this.currentSelection]);
+                const breacherLink = e.target.closest('.breacher-link');
+                if (breacherLink) {
+                    e.stopPropagation();
+                    window.open(breacherLink.href, '_blank');
                 }
-            }
-
-            selectItem(item) {
-                const url = item.dataset.url;
-                if (url) {
-                    this.showLoadingEffect();
-                    window.open(url, '_blank');
+            });
+            
+            // Initial update
+            window.hackerInterface.updateCurrentItems();
+        }
+        
+        // Hide boot sequence
+        function hideBootSequence() {
+            setTimeout(() => {
+                const bootSequence = document.getElementById('boot-sequence');
+                const mainContent = document.getElementById('main-content');
+                if (bootSequence) {
+                    bootSequence.style.display = 'none';
                 }
-            }
-
-            goBack() {
-                this.showLoadingEffect();
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 300);
-            }
-
-            showLoadingEffect() {
-                const overlay = document.createElement('div');
-                overlay.style.cssText = `
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background: rgba(0, 0, 0, 0.8);
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    z-index: 9999;
-                    color: #00ff00;
-                    font-family: 'Courier New', monospace;
-                    font-size: 18px;
-                `;
-                
-                overlay.innerHTML = `
-                    <div style="text-align: center;">
-                        <div style="margin-bottom: 20px;">LOADING...</div>
-                        <div style="width: 200px; height: 2px; background: #333; margin: 0 auto;">
-                            <div style="height: 100%; background: #00ff00; width: 0%; animation: progress 1s ease-in-out forwards;"></div>
-                        </div>
-                    </div>
-                `;
-                
-                const style = document.createElement('style');
-                style.textContent = `
-                    @keyframes progress {
-                        to { width: 100%; }
-                    }
-                `;
-                document.head.appendChild(style);
-                
-                document.body.appendChild(overlay);
-                
-                setTimeout(() => {
-                    overlay.remove();
-                    style.remove();
-                }, 1500);
+                if (mainContent) {
+                    mainContent.style.opacity = '1';
+                }
+            }, 4500);
+        }
+        
+        // Update time
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('en-US', { 
+                hour12: false, 
+                timeZone: 'UTC' 
+            }) + ' UTC';
+            
+            const timeElement = document.getElementById('current-time');
+            if (timeElement) {
+                timeElement.textContent = timeStr;
             }
         }
     </script>
