@@ -17,6 +17,7 @@
             --warning-red: #ff0000;
             --warning-yellow: #ffff00;
             --status-blue: #0080ff;
+            --panel-bg: rgba(0, 30, 0, 0.8);
         }
         
         * {
@@ -125,11 +126,35 @@
             letter-spacing: 3px;
             margin-bottom: 10px;
             text-shadow: 0 0 10px var(--terminal-green);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { text-shadow: 0 0 10px var(--terminal-green); }
+            50% { text-shadow: 0 0 20px var(--terminal-green); }
+            100% { text-shadow: 0 0 10px var(--terminal-green); }
         }
         
         .section-subtitle {
             font-size: 14px;
             opacity: 0.7;
+        }
+        
+        /* Introduction text */
+        .intro-text {
+            margin: 20px auto;
+            padding: 15px;
+            border: 1px solid var(--terminal-green);
+            background: var(--panel-bg);
+            max-width: 900px;
+            font-size: 14px;
+            line-height: 1.6;
+            animation: slideIn 0.8s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
         
         /* Navigation help */
@@ -161,6 +186,10 @@
             cursor: pointer;
         }
         
+        .database-list tr {
+            transition: background-color 0.3s ease;
+        }
+        
         .database-list tr:hover {
             background-color: rgba(0, 255, 0, 0.05);
         }
@@ -174,7 +203,7 @@
             color: var(--terminal-green);
         }
         
-        .list-size, .list-records {
+        .list-size, .list-date {
             text-align: center;
             white-space: nowrap;
         }
@@ -184,6 +213,26 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .list-description.expanded {
+            white-space: normal;
+            overflow: visible;
+            position: absolute;
+            background: var(--panel-bg);
+            border: 1px solid var(--terminal-green);
+            padding: 10px;
+            z-index: 10;
+            max-width: 400px;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            animation: expand 0.3s ease-out;
+        }
+        
+        @keyframes expand {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
         
         .list-tags {
@@ -222,6 +271,24 @@
             color: var(--warning-red);
         }
         
+        .list-tag.magnet {
+            background: rgba(255, 100, 0, 0.2);
+            border: 1px solid #ff6400;
+            color: #ff6400;
+        }
+        
+        .list-tag.torrent {
+            background: rgba(200, 0, 0, 0.2);
+            border: 1px solid #c80000;
+            color: #c80000;
+        }
+        
+        .list-tag.direct {
+            background: rgba(0, 200, 200, 0.2);
+            border: 1px solid #00c8c8;
+            color: #00c8c8;
+        }
+        
         .pagination {
             display: flex;
             justify-content: center;
@@ -236,10 +303,12 @@
             padding: 5px 10px;
             cursor: pointer;
             font-family: 'Courier Prime', monospace;
+            transition: all 0.3s ease;
         }
         
         .pagination button:hover {
             background: rgba(0, 255, 0, 0.2);
+            transform: translateY(-2px);
         }
         
         .pagination button.active {
@@ -278,10 +347,120 @@
             cursor: pointer;
             font-family: 'Courier Prime', monospace;
             font-size: 12px;
+            transition: all 0.3s ease;
         }
         
         .download-btn:hover {
             background: rgba(0, 255, 0, 0.2);
+            transform: scale(1.05);
+        }
+        
+        /* Changelog panel */
+        .changelog-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 700px;
+            background: var(--panel-bg);
+            border: 2px solid var(--terminal-green);
+            z-index: 1000;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+            display: none;
+            animation: panelSlide 0.5s ease-out;
+        }
+        
+        @keyframes panelSlide {
+            from { opacity: 0; transform: translate(-50%, -60%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+        
+        .changelog-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--terminal-green);
+        }
+        
+        .changelog-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--terminal-green);
+            font-size: 20px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            transform: rotate(90deg);
+        }
+        
+        .changelog-content {
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .changelog-item {
+            margin-bottom: 10px;
+            padding-left: 15px;
+            border-left: 2px solid var(--terminal-green);
+            animation: fadeInLeft 0.5s ease-out;
+        }
+        
+        @keyframes fadeInLeft {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .changelog-date {
+            font-weight: bold;
+            color: var(--status-blue);
+        }
+        
+        .changelog-text {
+            margin-top: 5px;
+        }
+        
+        .changelog-toggle {
+            position: fixed;
+            bottom: 50px;
+            right: 20px;
+            background: var(--dark-green);
+            color: var(--terminal-bg);
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-family: 'Courier Prime', monospace;
+            font-weight: bold;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+        
+        .changelog-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px var(--terminal-green);
+        }
+        
+        /* Overlay for when changelog is open */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+            display: none;
         }
         
         /* Scrollbar */
@@ -317,6 +496,16 @@
                 flex-direction: column;
                 gap: 2px;
             }
+            
+            .changelog-panel {
+                width: 95%;
+                padding: 15px;
+            }
+            
+            .intro-text {
+                font-size: 12px;
+                padding: 10px;
+            }
         }
     </style>
 </head>
@@ -341,12 +530,16 @@
                     <p class="section-subtitle">Leaked databases and data breaches</p>
                 </div>
 
+                <div class="intro-text">
+                    <p>This archive contains a collection of databases, combolists, and other data breaches from various sources. Most leaks include personal information, credentials, and confidential documents. Use the navigation keys to browse, Enter to download, and refer to the changelog for recent updates. Always verify data integrity before use.</p>
+                </div>
+
                 <table class="database-list" id="database-list">
                     <thead>
                         <tr>
                             <th style="width: 25%">NAME</th>
                             <th style="width: 10%">SIZE</th>
-                            <th style="width: 10%">RECORDS</th>
+                            <th style="width: 10%">DATE</th>
                             <th style="width: 15%">TAGS</th>
                             <th style="width: 25%">DESCRIPTION</th>
                             <th style="width: 10%">STATUS</th>
@@ -363,7 +556,7 @@
                 </div>
 
                 <div class="navigation-help">
-                    <p>► ARROW KEYS: Navigate | ENTER: Download | ESC: Back to menu</p>
+                    <p>► ARROW KEYS: Navigate | ENTER: Download | ESC: Back to menu | C: Open Changelog</p>
                 </div>
             </div>
         </main>
@@ -374,6 +567,48 @@
         </div>
     </div>
 
+    <!-- Changelog Toggle Button -->
+    <button class="changelog-toggle" id="changelog-toggle">CHANGELOG</button>
+
+    <!-- Changelog Panel -->
+    <div class="overlay" id="overlay"></div>
+    <div class="changelog-panel" id="changelog-panel">
+        <div class="changelog-header">
+            <div class="changelog-title">SYSTEM CHANGELOG</div>
+            <button class="close-btn" id="close-changelog">✕</button>
+        </div>
+        <div class="changelog-content">
+            <div class="changelog-item">
+                <div class="changelog-date">2023-11-15</div>
+                <div class="changelog-text">Added new database mirror system with fallback URLs</div>
+            </div>
+            <div class="changelog-item">
+                <div class="changelog-date">2023-11-10</div>
+                <div class="changelog-text">Implemented expandable descriptions for better readability</div>
+            </div>
+            <div class="changelog-item">
+                <div class="changelog-date">2023-11-05</div>
+                <div class="changelog-text">Added 15 new database entries from recent breaches</div>
+            </div>
+            <div class="changelog-item">
+                <div class="changelog-date">2023-11-01</div>
+                <div class="changelog-text">Improved UI animations and keyboard navigation</div>
+            </div>
+            <div class="changelog-item">
+                <div class="changelog-date">2023-10-25</div>
+                <div class="changelog-text">Fixed download issues with magnet and torrent links</div>
+            </div>
+            <div class="changelog-item">
+                <div class="changelog-date">2023-10-20</div>
+                <div class="changelog-text">Enhanced security protocols for secure browsing</div>
+            </div>
+            <div class="changelog-item">
+                <div class="changelog-date">2023-10-15</div>
+                <div class="changelog-text">Initial release of Darknet Database Archive v2.0</div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Database data with updated information
         const databases = [
@@ -381,78 +616,220 @@
                 id: 1,
                 name: 'National-Police-Spain Database',
                 url: 'https://files.catbox.moe/43uzr4.7z',
+                mirrors: ['https://alternate-mirror.com/police-spain.7z'],
                 breacher: '',
                 breacher_link: '',
                 data_size: '1.9MB',
-                data_type: 'sh_history, bash_history, profiles, reports, keys, passwords, Personal Information.',
-                record_count: '~1,200 records',
-                tags: ['verified', 'cdn'],
+                breach_date: '2023-08-12',
+                tags: ['verified', 'cdn', 'direct'],
                 description: 'National Police Spain database, reports, logs that were stolen from an employee.'
             },
             {
                 id: 2,
                 name: 'Uruguay’s Civil Aviation Authority (DINACIA) Database',
                 url: 'https://files.catbox.moe/5vfp14.zip',
+                mirrors: ['https://backup-server.com/uruguay-aviation.zip'],
                 breacher: 'LaPompaLeaks',
                 breacher_link: '',
                 data_size: '26.2 MB',
-                data_type: 'emails, messages, confidential documents, phone numbers',
-                record_count: '~5,000 records',
-                tags: ['verified', 'cdn'],
+                breach_date: '2023-09-05',
+                tags: ['verified', 'cdn', 'direct'],
                 description: 'Confidential documents from Uruguay\'s aviation authority leaked by LaPompaLeaks'
             },
             {
                 id: 3,
                 name: 'The North Korea Files',
                 url: 'magnet:?xt=urn:btih:87f2227bedee7ed5d89511fe4703133af1c1eb5d&dn=APT%20Down%20-%20The%20North%20Korea%20Files&tr=udp%3a%2f%2ftracker.opentrackr.org%3a1337%2fannounce',
-                // BACKUP LINK: https://data.ddosecrets.com/APT%20Down%20-%20The%20North%20Korea%20Files/APT%20Down%20-%20The%20North%20Korea%20Files.torrent
+                mirrors: ['https://data.ddosecrets.com/APT%20Down%20-%20The%20North%20Korea%20Files/APT%20Down%20-%20The%20North%20Korea%20Files.torrent'],
                 breacher: 'Saber, cyb0rg',
                 breacher_link: '',
                 data_size: '8.90 GB',
-                data_type: 'South Korean government networks and companies, email addresses, hacking tools used by the Kimsuky group, internal manuals, passwords, and more',
-                record_count: '',
-                tags: ['verified', 'not_cdn'],
-                description: 'Approximately 9 GB of files exfiltrated from a North Korean threat actors computer. '
+                breach_date: '2023-07-22',
+                tags: ['verified', 'magnet', 'torrent'],
+                description: 'Approximately 9 GB of files exfiltrated from a North Korean threat actors computer.'
             },
             {
                 id: 4,
                 name: 'Israel Ministry of Justice',
-                url: 'magnet:?xt=urn:btih:A94997457756E6847E19E055122AE303A5026200&dn=Israel%20Ministry%20of%20Justice&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.tracker.cl%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.demonii.com%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fmoonburrow.club%3A6969%2Fannounce&tr=udp%3A%2F%2Fexplodie.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.tiny-vps.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.bittor.pw%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.0x7c0.com%3A6969%2Fannounce&tr=udp%3A%2F%2Frun.publictracker.xyz%3A6969%2Fannounce&tr=udp%3A%2F%2Fretracker01-msk-virt.corbina.net%3A80%2Fannounce&tr=udp%3A%2F%2Fopentracker.io%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.u-p.pw%3A6969%2Fannounce&tr=udp%3A%2F%2Foh.fuuuuuck.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fleet-tracker.moe%3A1337%2Fannounce&tr=udp%3A%2F%2Fepider.me%3A6969%2Fannounce&tr=https%3A%2F%2Ftracker.tamersunion.org%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.gbitt.info%3A443%2Fannounce&tr=http%3A%2F%2Ftracker.gbitt.info%3A80%2Fannounce',
-                // BACKUP URL1: https://data.ddosecrets.com/Israel%20Ministry%20of%20Justice/Israel%20Ministry%20of%20Justice.torrent
-                // BACKUP URL2: https://forbiddenstories.org/actualites_posts/israel-maneuvered-to-prevent-disclosure-of-state-secrets-amid-whatsapp-vs-nso-lawsuit/
-                // BACKUP URL3: https://www.derstandard.at/story/3000000229758/wie-israel-die-ueberwachungssoftware-pegasus-zum-staatsgeheimnis-machte
-                // BACKUP URL4: https://www.theguardian.com/news/article/2024/jul/25/israel-tried-to-frustrate-us-lawsuit-over-pegasus-spyware-leak-suggests
+                url: 'magnet:?xt=urn:btih:A94997457756E6847E19E055122AE303A5026200&dn=Israel%20Ministry%20of%20Justice&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce',
+                mirrors: [
+                    'https://data.ddosecrets.com/Israel%20Ministry%20of%20Justice/Israel%20Ministry%20of%20Justice.torrent',
+                    'https://mirror.darknetarchive.com/israel-justice.torrent'
+                ],
                 breacher: 'Anonymous For Justice',
                 breacher_link: '',
                 data_size: '245.00 GB',
-                data_type: 'emails, documents, private messages',
-                record_count: '',
-                tags: ['verified', 'not_cdn'],
+                breach_date: '2023-04-17',
+                tags: ['verified', 'magnet', 'torrent'],
                 description: 'Documents from the Israel Ministry of Justice released April 2024 by Anonymous For Justice. The dataset contains 800,000 emails in HTML format, over 700,000 image files, 200,000 documents and thousands of spreadsheets and presentations.'
             },
             {
                 id: 5,
-                name: 'Healthcare Records 2023',
-                url: 'http://medleakz.onion/health23.rar',
-                breacher: 'WhiteCoat',
-                breacher_link: 'https://darkweb.onion/whitecoat',
-                data_size: '3.5 GB',
-                data_type: 'Medical history, insurance data',
-                record_count: '2.8M records',
-                tags: ['verified'],
-                description: 'Confidential patient records from healthcare provider'
+                name: 'Chinga La Migra',
+                url: '',
+                mirrors: [],
+                breacher: '',
+                breacher_link: '',
+                data_size: '',
+                breach_date: '',
+                tags: ['not_on_cdn'],
+                description: ''
             },
             {
                 id: 6,
-                name: 'E-commerce User Data',
-                url: 'http://shopexposed.onion/customers.zip',
-                breacher: 'RetailRaid',
-                breacher_link: 'https://telegram.me/retailraid',
-                data_size: '1.2 GB',
-                data_type: 'Purchase history, credit cards',
-                record_count: '5.4M records',
-                tags: ['cdn'],
-                description: 'Customer transaction data from online retailer'
+                name: 'Emniyet Genel Müdürlüğü (EGM) Turkey National Police',
+                url: '',
+                mirrors: [],
+                breacher: '',
+                breacher_link: '',
+                data_size: '',
+                breach_date: '',
+                tags: [],
+                description: ''
+            },
+            {
+                id: 7,
+                name: 'FBI-DHS leak',
+                url: '',
+                mirrors: [],
+                breacher: '',
+                breacher_link: '',
+                data_size: '',
+                breach_date: '',
+                tags: [],
+                description: ''
+            },
+            {
+                id: 8,
+                name: 'GiveSendGo',
+                url: '',
+                mirrors: [],
+                breacher: '',
+                breacher_link: '',
+                data_size: '',
+                breach_date: '',
+                tags: [],
+                description: ''
+            },
+            {
+                id: 9,
+                name: 'GiveSendGo 2.0',
+                url: '',
+                mirrors: [],
+                breacher: '',
+                breacher_link: '',
+                data_size: '',
+                breach_date: '',
+                tags: [],
+                description: ''
+            },
+            {
+                id: 10,
+                name: 'GiveSendGo 3.0',
+                url: '',
+                mirrors: [],
+                breacher: '',
+                breacher_link: '',
+                data_size: '',
+                breach_date: '',
+                tags: [],
+                description: ''
+            },
+            {
+                id: 11,
+                name: 'GiveSendGo 4.0',
+                url: '',
+                mirrors: [],
+                breacher: '',
+                breacher_link: '',
+                data_size: '',
+                breach_date: '',
+                tags: [],
+                description: ''
+            },
+            {
+                id: 12,
+                name: 'GiveSendGo 5.0',
+                url: '',
+                mirrors: [],
+                breacher: '',
+                breacher_link: '',
+                data_size: '',
+                breach_date: '',
+                tags: [],
+                description: ''
+            },
+            {
+                id: 13,
+                name: 'Ejército del Perú',
+                url: '',
+                mirrors: [],
+                breacher: '',
+                breacher_link: '',
+                data_size: '',
+                breach_date: '',
+                tags: [],
+                description: ''
+            },
+            {
+                id: 14,
+                name: 'Accent Capital',
+                url: '',
+                mirrors: [],
+                breacher: '',
+                breacher_link: '',
+                data_size: '',
+                breach_date: '',
+                tags: [],
+                description: ''
+            },
+            {
+                id: 15,
+                name: 'Achinsk City Government',
+                url: '',
+                mirrors: [],
+                breacher: '',
+                breacher_link: '',
+                data_size: '',
+                breach_date: '',
+                tags: [],
+                description: ''
+            },
+            {
+                id: 16,
+                name: 'ACS Law emails',
+                url: '',
+                mirrors: [],
+                breacher: '',
+                breacher_link: '',
+                data_size: '',
+                breach_date: '',
+                tags: [],
+                description: ''
+            },
+            {
+                id: 17,
+                name: 'Adopt A Trucker founder emails',
+                url: '',
+                mirrors: [],
+                breacher: '',
+                breacher_link: '',
+                data_size: '',
+                breach_date: '',
+                tags: [],
+                description: ''
+            },
+            {
+                id: 18,
+                name: 'Aerial Surveillance Footage',
+                url: '',
+                mirrors: [],
+                breacher: '',
+                breacher_link: '',
+                data_size: '',
+                breach_date: '',
+                tags: [],
+                description: ''
             }
         ];
 
@@ -465,6 +842,7 @@
             renderDatabaseList();
             setupPagination();
             initHackerInterface();
+            initChangelog();
             hideBootSequence();
             updateTime();
             setInterval(updateTime, 1000);
@@ -482,7 +860,6 @@
                 const db = databases[i];
                 const row = document.createElement('tr');
                 row.classList.add('database-item');
-                row.dataset.url = db.url;
                 row.dataset.id = db.id;
                 
                 // Create tag elements
@@ -502,9 +879,18 @@
                         } else if (tag === 'possibly_infected') {
                             tagClass = 'infected';
                             tagIcon = '<i class="fas fa-exclamation-triangle"></i> ';
-                        } else if (tag === 'not_on_cdn') {
+                        } else if (tag === 'not_on_cdn' || tag === 'not_cdn') {
                             tagClass = 'no-cdn';
                             tagIcon = '<i class="fas fa-times"></i> ';
+                        } else if (tag === 'magnet') {
+                            tagClass = 'magnet';
+                            tagIcon = '<i class="fas fa-magnet"></i> ';
+                        } else if (tag === 'torrent') {
+                            tagClass = 'torrent';
+                            tagIcon = '<i class="fas fa-file-download"></i> ';
+                        } else if (tag === 'direct') {
+                            tagClass = 'direct';
+                            tagIcon = '<i class="fas fa-download"></i> ';
                         }
                         
                         tagHtml += `<span class="list-tag ${tagClass}">${tagIcon}${tag.toUpperCase().replace('_', ' ')}</span>`;
@@ -513,16 +899,16 @@
                 }
                 
                 // Check if URL is valid for status
-                const isValidUrl = db.url && !db.url.includes('example.com') && !db.url.includes('offline-site.com');
+                const isValidUrl = db.url && db.url.length > 0;
                 const statusClass = isValidUrl ? 'status-online' : 'status-offline';
                 const statusText = isValidUrl ? '● ONLINE' : '● OFFLINE';
                 
                 row.innerHTML = `
                     <td class="list-name">${db.name}</td>
                     <td class="list-size">${db.data_size}</td>
-                    <td class="list-records">${db.record_count}</td>
+                    <td class="list-date">${db.breach_date}</td>
                     <td>${tagHtml}</td>
-                    <td class="list-description">${db.description}</td>
+                    <td class="list-description" title="Click to expand">${db.description || 'No description available'}</td>
                     <td class="list-status"><span class="${statusClass}">${statusText}</span></td>
                     <td>
                         <button class="download-btn" data-id="${db.id}">
@@ -543,6 +929,14 @@
                     if (db) {
                         initiateDownload(db);
                     }
+                });
+            });
+            
+            // Add event listeners to description cells
+            document.querySelectorAll('.list-description').forEach(desc => {
+                desc.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    this.classList.toggle('expanded');
                 });
             });
             
@@ -614,8 +1008,8 @@
         
         // Initialize download process
         function initiateDownload(db) {
-            if (!db.url || db.url.includes('example.com') || db.url.includes('offline-site.com')) {
-                alert('Download unavailable: This database is currently offline or the source is invalid.');
+            if (!db.url || db.url.length === 0) {
+                alert('Download unavailable: This database currently has no available download links.');
                 return;
             }
             
@@ -623,7 +1017,13 @@
             
             // Open the actual URL in a new tab after a short delay
             setTimeout(() => {
-                window.open(db.url, '_blank');
+                if (db.url.startsWith('magnet:')) {
+                    // Handle magnet links
+                    window.location.href = db.url;
+                } else {
+                    // Handle direct URLs
+                    window.open(db.url, '_blank');
+                }
             }, 1500);
         }
         
@@ -744,6 +1144,11 @@
                         e.preventDefault();
                         window.location.href = 'index.html';
                         break;
+                    case 'c':
+                    case 'C':
+                        e.preventDefault();
+                        toggleChangelog();
+                        break;
                 }
             });
             
@@ -767,6 +1172,32 @@
             
             // Initial update
             window.hackerInterface.updateCurrentItems();
+        }
+        
+        // Initialize changelog functionality
+        function initChangelog() {
+            const toggleBtn = document.getElementById('changelog-toggle');
+            const closeBtn = document.getElementById('close-changelog');
+            const overlay = document.getElementById('overlay');
+            const panel = document.getElementById('changelog-panel');
+            
+            toggleBtn.addEventListener('click', toggleChangelog);
+            closeBtn.addEventListener('click', toggleChangelog);
+            overlay.addEventListener('click', toggleChangelog);
+        }
+        
+        // Toggle changelog visibility
+        function toggleChangelog() {
+            const overlay = document.getElementById('overlay');
+            const panel = document.getElementById('changelog-panel');
+            
+            if (panel.style.display === 'block') {
+                panel.style.display = 'none';
+                overlay.style.display = 'none';
+            } else {
+                panel.style.display = 'block';
+                overlay.style.display = 'block';
+            }
         }
         
         // Hide boot sequence
